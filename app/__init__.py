@@ -1,0 +1,1 @@
+"""Dento Smart backend package."""
