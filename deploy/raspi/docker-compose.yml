@@ -43,7 +43,7 @@ services:
       context: ${FRONTEND_PATH}
       dockerfile: Dockerfile.prod
       args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-https://dento-backend.inkubasistartupunhas.id}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-https://dento-backend.inkubasistartupunhas.id/api}
         VITE_WS_BASE_URL: ${VITE_WS_BASE_URL:-wss://dento-backend.inkubasistartupunhas.id}
     container_name: dento-frontend
     restart: unless-stopped
