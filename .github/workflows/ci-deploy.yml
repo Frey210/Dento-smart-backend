@@ -25,7 +25,7 @@ jobs:
           ENVIRONMENT: "test"
         run: |
           . .venv/bin/activate
-          pytest -q
+          PYTHONPATH=. pytest -q
 
   deploy:
     runs-on: self-hosted
