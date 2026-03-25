@@ -29,10 +29,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      - name: Install cloudflared
-        run: |
-          curl -L -o cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared.deb
       - name: Configure SSH
         env:
           PI_SSH_KEY: ${{ secrets.PI_SSH_KEY }}
@@ -44,11 +40,8 @@ jobs:
         env:
           PI_HOST: ${{ secrets.PI_HOST }}
           PI_USER: ${{ secrets.PI_USER }}
-          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
           ssh -o StrictHostKeyChecking=no \
-            -o "ProxyCommand=cloudflared access ssh --hostname $PI_HOST" \
             -i ~/.ssh/id_ed25519 \
             $PI_USER@$PI_HOST \
             "set -e; cd ~/dento-deploy/Dento-smart-backend && git pull; cd deploy/raspi && docker-compose up -d --build backend; docker-compose exec -T backend alembic upgrade head"
