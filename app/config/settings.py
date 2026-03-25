@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     device_rate_limit_per_minute: int = Field(default=120, validation_alias="DEVICE_RATE_LIMIT_PER_MINUTE")
     device_offline_minutes: int = Field(default=5, validation_alias="DEVICE_OFFLINE_MINUTES")
     session_inactivity_minutes: int = Field(default=10, validation_alias="SESSION_INACTIVITY_MINUTES")
+    skip_partitioning: bool = Field(default=False, validation_alias="SKIP_PARTITIONING")
 
     database_url: str = Field(
         default="postgresql://postgres:postgres@localhost:5432/dento_smart",

@@ -44,6 +44,8 @@ async def health_check() -> dict[str, str]:
 
 @app.on_event("startup")
 async def startup_tasks() -> None:
+    if settings.skip_partitioning or settings.environment.lower() == "test":
+        return
     await ensure_current_month_partition()
 
 
