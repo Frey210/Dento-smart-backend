@@ -148,3 +148,5 @@ Apply migrations:
 ```bash
 alembic upgrade head
 ```
+
+CI test marker (backend).
