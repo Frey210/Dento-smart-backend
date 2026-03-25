@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,24 +24,15 @@ jobs:
         run: pytest -q
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
-      - name: Configure SSH
-        env:
-          PI_SSH_KEY: ${{ secrets.PI_SSH_KEY }}
+      - name: Deploy on Raspberry Pi
         run: |
-          mkdir -p ~/.ssh
-          echo "$PI_SSH_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-      - name: Deploy to Raspberry Pi
-        env:
-          PI_HOST: ${{ secrets.PI_HOST }}
-          PI_USER: ${{ secrets.PI_USER }}
-        run: |
-          ssh -o StrictHostKeyChecking=no \
-            -i ~/.ssh/id_ed25519 \
-            $PI_USER@$PI_HOST \
-            "set -e; cd ~/dento-deploy/Dento-smart-backend && git pull; cd deploy/raspi && docker-compose up -d --build backend; docker-compose exec -T backend alembic upgrade head"
+          set -e
+          cd ~/dento-deploy/Dento-smart-backend
+          git pull
+          cd deploy/raspi
+          docker-compose up -d --build backend
+          docker-compose exec -T backend alembic upgrade head
