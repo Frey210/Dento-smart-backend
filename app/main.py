@@ -46,7 +46,10 @@ async def health_check() -> dict[str, str]:
 async def startup_tasks() -> None:
     if settings.skip_partitioning or settings.environment.lower() == "test":
         return
-    await ensure_current_month_partition()
+    try:
+        await ensure_current_month_partition()
+    except Exception:
+        logger.exception("startup_partitioning_failed")
 
 
 @app.middleware("http")
